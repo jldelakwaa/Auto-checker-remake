@@ -1,4 +1,5 @@
 docker exec auto-checker-laravel.test-1 chmod -R 775 storage bootstrap/cache
 docker exec auto-checker-laravel.test-1 chown -R sail:sail storage bootstrap/cache
+chmod +x docker-start.sh
 
 docker exec auto-checker-laravel.test-1 npm run dev
