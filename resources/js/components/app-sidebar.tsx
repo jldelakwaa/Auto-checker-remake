@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, questions } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, ScanText, LayoutGrid, FileQuestion, FilePenLine, Users  } from 'lucide-react';
@@ -24,7 +24,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Questions',
-        href: '#',
+        href: questions(),
         icon: FileQuestion,
     },
     {

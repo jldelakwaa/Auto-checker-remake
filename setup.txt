@@ -3,3 +3,6 @@ docker exec auto-checker-laravel.test-1 chown -R sail:sail storage bootstrap/cac
 chmod +x docker-start.sh
 
 docker exec auto-checker-laravel.test-1 npm run dev
+
+#after editing web.php do this for auto route tx
+php artisan wayfinder:generate
