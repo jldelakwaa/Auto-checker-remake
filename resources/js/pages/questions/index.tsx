@@ -15,8 +15,7 @@ export default function Questions() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Questions" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <h1 className="text-2xl font-bold">Questions</h1>
-                <p className="text-muted-foreground">Your questions page content will go here.</p>
+                <p className="text-muted-foreground italic">Ready to create and manage your questions.</p>
             </div>
         </AppLayout>
     );

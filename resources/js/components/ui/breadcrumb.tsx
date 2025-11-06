@@ -49,9 +49,17 @@ function BreadcrumbLink({
   )
 }
 
-function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
+function BreadcrumbPage({ 
+  asChild,
+  className, 
+  ...props 
+}: React.ComponentProps<"span"> & {
+  asChild?: boolean
+}) {
+  const Comp = asChild ? Slot : "span"
+  
   return (
-    <span
+    <Comp
       data-slot="breadcrumb-page"
       role="link"
       aria-disabled="true"
