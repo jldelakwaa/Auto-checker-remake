@@ -26,11 +26,25 @@ const mainNavItems: NavItem[] = [
         title: 'Questions',
         href: questions(),
         icon: FileQuestion,
+        items: [
+            {
+                title: 'All Questions',
+                href: questions(),
+            },
+            {
+                title: 'Create Question',
+                href: '#',
+            },
+            {
+                title: 'Question Bank',
+                href: '#',
+            },
+        ],
     },
     {
         title: 'Answers',
         href: '#',
-        icon: FilePenLine ,
+        icon: FilePenLine,
     },
     {
         title: 'Connect',
@@ -62,6 +76,7 @@ export function AppSidebar() {
                             <Link href={dashboard()} prefetch>
                                 <AppLogo />
                             </Link>
+                            
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
