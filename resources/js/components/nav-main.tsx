@@ -27,11 +27,16 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                 {items.map((item) => {
                     // If item has sub-items, render as collapsible
                     if (item.items && item.items.length > 0) {
+                        // Check if any sub-item is active
+                        const hasActiveSubItem = item.items.some((subItem) =>
+                            page.url.startsWith(resolveUrl(subItem.href))
+                        );
+                        
                         return (
                             <Collapsible
                                 key={item.title}
                                 asChild
-                                defaultOpen={item.isActive}
+                                defaultOpen={item.isActive || hasActiveSubItem}
                                 className="group/collapsible"
                             >
                                 <SidebarMenuItem>
@@ -52,11 +57,8 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                                 >
                                                     <SidebarMenuSubButton
                                                         asChild
-                                                        isActive={page.url.startsWith(
-                                                            resolveUrl(
-                                                                subItem.href,
-                                                            ),
-                                                        )}
+                                                        
+                                                        isActive={page.url === resolveUrl(subItem.href)}
                                                     >
                                                         <Link
                                                             href={subItem.href}
