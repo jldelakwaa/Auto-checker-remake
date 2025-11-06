@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, questions } from '@/routes';
+import { dashboard, questions_index, questions_create } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, ScanText, LayoutGrid, FileQuestion, FilePenLine, Users  } from 'lucide-react';
@@ -24,19 +24,19 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Questions',
-        href: questions(),
+        href: questions_index(),
         icon: FileQuestion,
         items: [
             {
-                title: 'All Questions',
-                href: questions(),
+                title: 'My Questions',
+                href: questions_index(),
             },
             {
                 title: 'Create Question',
-                href: '#',
+                href: questions_create(),
             },
             {
-                title: 'Question Bank',
+                title: 'Import Questions',
                 href: '#',
             },
         ],
@@ -45,11 +45,31 @@ const mainNavItems: NavItem[] = [
         title: 'Answers',
         href: '#',
         icon: FilePenLine,
+        items: [
+            {
+                title: 'My Answers',
+                href: '#',
+            },
+            {
+                title: 'Pendings',
+                href: '#',
+            },
+        ],
     },
     {
         title: 'Connect',
         href: '#',
         icon: Users,
+        items: [
+            {
+                title: 'Friends',
+                href: '#',
+            },
+            {
+                title: 'Add Friend',
+                href: '#',
+            },
+        ],
     },
 ];
 
@@ -76,7 +96,6 @@ export function AppSidebar() {
                             <Link href={dashboard()} prefetch>
                                 <AppLogo />
                             </Link>
-                            
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
