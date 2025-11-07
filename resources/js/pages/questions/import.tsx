@@ -1,21 +1,21 @@
 import AppLayout from '@/layouts/app-layout';
-import { questions_index } from '@/routes';
+import { questions_import } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Create Questions',
-        href: questions_index().url,
+        title: 'Import Questions',
+        href: questions_import().url,
     },
 ];
 
-export default function CreateQuestion() {
+export default function ImportQuestions() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Question" />
+            <Head title="Import Questions" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <p className="text-muted-foreground italic">Create</p>
+                <p className="text-muted-foreground italic">import</p>
             </div>
         </AppLayout>
     );

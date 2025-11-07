@@ -10,7 +10,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, questions_index, questions_create } from '@/routes';
+import { 
+    dashboard, 
+    questions_index, 
+    questions_create,
+    questions_import 
+} from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, ScanText, LayoutGrid, FileQuestion, FilePenLine, Users  } from 'lucide-react';
@@ -37,7 +42,7 @@ const mainNavItems: NavItem[] = [
             },
             {
                 title: 'Import Questions',
-                href: '#',
+                href: questions_import(),
             },
         ],
     },

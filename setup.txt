@@ -1,9 +1,85 @@
-docker exec auto-checker-laravel.test-1 chmod -R 775 storage bootstrap/cache
-docker exec auto-checker-laravel.test-1 chown -R sail:sail storage bootstrap/cache
-chmod +x docker-start.sh
-sudo chown -R t4ch:t4ch resources/js/
+# Setup Instructions for Auto-Checker Project
 
-docker exec auto-checker-laravel.test-1 npm run dev
+## FIRST TIME SETUP (After Cloning on a New PC):
 
-#after editing web.php do this for auto route tx
-php artisan wayfinder:generate
+1. Copy environment file:
+   cp .env.example .env
+
+2. Install PHP dependencies:
+   composer install
+
+3. Fix permissions for sail and artisan:
+   chmod +x artisan
+   chmod +x vendor/bin/sail
+   chmod +x vendor/laravel/sail/bin/sail
+
+4. Start Docker containers:
+   ./vendor/bin/sail up -d
+
+5. Generate application key:
+   ./vendor/bin/sail artisan key:generate
+
+6. Run database migrations:
+   ./vendor/bin/sail artisan migrate
+
+7. Install Node dependencies:
+   ./vendor/bin/sail npm install
+
+8. Fix permissions inside Docker container:
+   docker exec auto-checker-laravel.test-1 chmod -R 775 storage bootstrap/cache
+   docker exec auto-checker-laravel.test-1 chown -R sail:sail storage bootstrap/cache
+
+9. Fix host machine permissions:
+   sudo chown -R $USER:$USER resources/js/
+   chmod -R 775 resources/js/actions resources/js/routes
+
+10. Build frontend assets:
+    ./vendor/bin/sail npm run build
+
+---
+
+## DAILY DEVELOPMENT WORKFLOW:
+
+1. Start Docker containers:
+   ./vendor/bin/sail up -d
+
+2. Start development server (in a separate terminal):
+   ./vendor/bin/sail npm run dev
+
+3. Access the application:
+   http://localhost
+
+---
+
+## AFTER EDITING ROUTES (web.php or route files):
+
+Run this command to auto-generate route helpers:
+./vendor/bin/sail artisan wayfinder:generate
+
+---
+
+## USEFUL COMMANDS:
+
+# Stop Docker containers:
+./vendor/bin/sail down
+
+# Run artisan commands:
+./vendor/bin/sail artisan [command]
+
+# Run tests:
+./vendor/bin/sail test
+
+# Access container shell:
+./vendor/bin/sail shell
+
+# View logs:
+./vendor/bin/sail logs
+
+---
+
+## TROUBLESHOOTING:
+
+If you get "Permission denied" errors:
+1. Fix sail permissions: chmod +x vendor/bin/sail vendor/laravel/sail/bin/sail
+2. Fix artisan permissions: chmod +x artisan
+3. Fix storage permissions: docker exec auto-checker-laravel.test-1 chmod -R 775 storage bootstrap/cache

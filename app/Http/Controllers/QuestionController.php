@@ -25,6 +25,14 @@ class QuestionController extends Controller
     }
 
     /**
+     * Show the form for importing a new resource.
+     */
+    public function import(): Response
+    {
+        return Inertia::render('questions/import');
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

@@ -20,6 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('questions', [QuestionController::class, 'index'])->name('questions_index');
     Route::get('questions/create', [QuestionController::class, 'create'])->name('questions_create');
     Route::post('questions', [QuestionController::class, 'store'])->name('questions_store');
+    Route::get('questions/import', [QuestionController::class, 'import'])->name('questions_import');
+
     Route::get('questions/{question}', [QuestionController::class, 'show'])->name('questions_show');
     Route::get('questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions_edit');
     Route::put('questions/{question}', [QuestionController::class, 'update'])->name('questions_update');

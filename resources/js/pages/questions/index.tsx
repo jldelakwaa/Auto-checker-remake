@@ -1,7 +1,9 @@
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { questions_index } from '@/routes';
+import { questions_index, questions_create, questions_import } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { Import, SquarePlus  } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,8 +16,18 @@ export default function Questions() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Questions" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <p className="text-muted-foreground italic">Index</p>
+            <div className="flex h-full flex-1 gap-4 overflow-x-auto rounded-xl p-4">
+                <Button variant="default" asChild>
+                    <Link href={questions_create()}>
+                        <SquarePlus className="mr-2 h-4 w-4" /> Create Question
+                    </Link>
+                </Button>
+
+                <Button variant="default" asChild>
+                    <Link href={questions_import()}>
+                        <Import className="mr-2 h-4 w-4" /> Import Questions
+                    </Link>
+                </Button>
             </div>
         </AppLayout>
     );
