@@ -33,8 +33,9 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
             <div {...attributes} {...listeners} className="cursor-grab">
                 <GripVertical className="h-5 w-5 text-gray-500" />
             </div>
-            <Checkbox className="cursor-pointer" value={option.value} id={option.id} />
-            <Input type="text" placeholder={option.placeholder} value={option.text} onChange={(e) => updateOptionText(option.id, e.target.value)} className="ml-2" />
+            <Checkbox className="cursor-pointer" value={option.value} id={option.id}/>
+            {/* {option.label} */}
+            <Input type="text" placeholder={option.placeholder} value={option.text} onChange={(e) => updateOptionText(option.id, e.target.value)} className="ml-2"/>
             <Delete className={`h-7 w-7 ${optionsLength <= minLimit ? 'opacity-50' : 'cursor-pointer hover:text-red-500'}`}
                 onClick={optionsLength > minLimit ? () => removeOption(option.id) : undefined} />
         </div>
@@ -130,7 +131,7 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
                             ))}
                             {options.length < maxLimit && (
                                 <div className='flex items-center gap-2 ml-7'>
-
+                                    <Checkbox value="add-option" className="pointer-events-none cursor-default" />
                                     <Button variant="link" type="button"
                                         onClick={addOption}
                                         disabled={options.length >= maxLimit}>
