@@ -131,8 +131,9 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
                             ))}
                             {options.length < maxLimit && (
                                 <div className='flex items-center gap-2 ml-7'>
-                                    <Checkbox value="add-option" className="pointer-events-none cursor-default" />
+                                    <Checkbox value="add-option" className="pointer-events-none cursor-default " />
                                     <Button variant="link" type="button"
+                                        className='cursor-pointer'
                                         onClick={addOption}
                                         disabled={options.length >= maxLimit}>
                                         Add Option

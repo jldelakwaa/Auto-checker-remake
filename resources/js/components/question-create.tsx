@@ -19,6 +19,7 @@ import QuestionEnumeration from "./question-enumeration"
 import QuestionMultipleChoice from "./question-multiple-choice"
 import QuestionCheckbox from "./question-checkbox"
 import { Button } from "./ui/button"
+import { Trash2, Copy  } from 'lucide-react';
 
 export default function QuestionCreate() {
     const [questionNumber, setQuestionNumber] = useState(1);
@@ -91,23 +92,19 @@ export default function QuestionCreate() {
                                 <QuestionCheckbox questionType={questionType} />
 
                                 {/* other function */}
-                                <hr className="my-1" />
                                 <div className="flex justify-end gap-2">
-                                    <Button variant="default" type="button">
-                                        Duplicate
+                                    <Button variant="default" type="button" className="hover:bg-transparent hover:text-black hover:border-black border cursor-pointer">
+                                        <Copy className="h-4 w-4" />
                                     </Button>
-                                    
-                                    <Button variant="destructive" type="button">
-                                        Delete
+
+                                    <Button variant="destructive" type="button" className="hover:bg-transparent hover:text-red-500 hover:border-red-500 border cursor-pointer">
+                                        <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
-
-
-
-
-
-
                             </FieldGroup>
+                            <Button variant="default" className="self-end" type="submit">
+                                Submit
+                            </Button>
                         </FieldSet>
                     </FieldGroup>
                 </form>

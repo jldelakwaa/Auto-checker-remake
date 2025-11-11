@@ -11,12 +11,12 @@ export default function QuestionTrueFalse({ questionType }: QuestionTrueFalsePro
             {questionType === "true-false" && (
                 <Field>
                     <FieldLabel>Options</FieldLabel>
-                    <RadioGroup name="true-false-options" className="flex flex-col gap-4">
+                    <RadioGroup name="true-false-options" className="flex flex-col gap-4" defaultValue="true" required>
                         <div>
-                            <RadioGroupItem value="true" id="true"/> True
+                            <RadioGroupItem value="true" id="true" className="cursor-pointer" /> True
                         </div>
                         <div>
-                            <RadioGroupItem value="false" id="false" /> False
+                            <RadioGroupItem value="false" id="false" className="cursor-pointer" /> False
                         </div>  
                     </RadioGroup>
                 </Field>
@@ -24,4 +24,4 @@ export default function QuestionTrueFalse({ questionType }: QuestionTrueFalsePro
         </>
 
     );
-}   
+}

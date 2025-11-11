@@ -118,7 +118,7 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
                     <FieldLabel>Options</FieldLabel>
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={options.map(o => o.id)} strategy={verticalListSortingStrategy}>
-                            <RadioGroup name="multiple-choice-options" className="flex flex-col gap-4">
+                            <RadioGroup name="multiple-choice-options" className="flex flex-col gap-4" defaultValue='option1' required>
                                 {options.map(option => (
                                     <SortableOption
                                         key={option.id}
@@ -133,6 +133,7 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
                                 <div className='flex items-center gap-2 ml-7'>
                                     <RadioGroupItem value="add-option" className="pointer-events-none cursor-default" />
                                     <Button variant="link" type="button"
+                                        className='cursor-pointer'
                                         onClick={addOption}
                                         disabled={options.length >= maxLimit}>
                                         Add Option
