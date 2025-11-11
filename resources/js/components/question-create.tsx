@@ -17,6 +17,8 @@ import { useState } from "react"
 import QuestionTrueFalse from "./question-true-false"
 import QuestionEnumeration from "./question-enumeration"
 import QuestionMultipleChoice from "./question-multiple-choice"
+import QuestionCheckbox from "./question-checkbox"
+import { Button } from "./ui/button"
 
 export default function QuestionCreate() {
     const [questionNumber, setQuestionNumber] = useState(1);
@@ -25,6 +27,12 @@ export default function QuestionCreate() {
     const [answers, setAnswers] = useState([]);
     const [questionType, setQuestionType] = useState("multiple-choice");
     const [options, setOptions] = useState<string[]>([]);
+    const [questionTypes, setQuestionTypes] = useState([
+        { value: 'multiple-choice', label: 'Multiple Choice' },
+        { value: 'check-box', label: 'Check Box' },
+        { value: 'true-false', label: 'True or False' },
+        { value: 'enumeration', label: 'Enumeration' },
+    ]);
     return (
         <div>
             <div className="w-full p-4 rounded-lg shadow-lg">
@@ -45,33 +53,34 @@ export default function QuestionCreate() {
                             {/* Question Section */}
                             <FieldGroup className="bg-amber-50 p-4 rounded-lg">
                                 <div className="grid grid-cols-3 gap-4">
-                                    <Field className="col-span-2"> 
+                                    <Field className="col-span-2">
                                         <FieldLabel>Question {questionNumber}</FieldLabel>
                                         <Textarea placeholder="Enter question" />
                                     </Field>
 
                                     <div className="flex gap-4">
-                                    <Field>
-                                        <FieldLabel>Type</FieldLabel>
-                                        <Select value={questionType} onValueChange={setQuestionType}>
-                                            <SelectTrigger id="question-type">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="multiple-choice">Multiple Choice</SelectItem>
-                                                <SelectItem value="check-box">Check Box</SelectItem>
-                                                <SelectItem value="true-false">True or False</SelectItem>
-                                                <SelectItem value="enumeration">Enumeration</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </Field>
+                                        <Field>
+                                            <FieldLabel>Type</FieldLabel>
+                                            <Select value={questionType} onValueChange={setQuestionType}>
+                                                <SelectTrigger id="question-type">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {questionTypes.map((type) => (
+                                                        <SelectItem key={type.value} value={type.value}>
+                                                            {type.label}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </Field>
 
-                                    <Field>
-                                        <FieldLabel>Points</FieldLabel>
-                                        <Input type="number" placeholder="Enter points"
-                                            value={defaultQuestionScore}
-                                            onChange={(e) => setDefaultQuestionScore(Number(e.target.value))} />
-                                    </Field>
+                                        <Field>
+                                            <FieldLabel>Points</FieldLabel>
+                                            <Input type="number" placeholder="Enter points"
+                                                value={defaultQuestionScore}
+                                                onChange={(e) => setDefaultQuestionScore(Number(e.target.value))} />
+                                        </Field>
                                     </div>
                                 </div>
 
@@ -79,6 +88,24 @@ export default function QuestionCreate() {
                                 <QuestionEnumeration questionType={questionType} />
                                 <QuestionTrueFalse questionType={questionType} />
                                 <QuestionMultipleChoice questionType={questionType} />
+                                <QuestionCheckbox questionType={questionType} />
+
+                                {/* other function */}
+                                <hr className="my-1" />
+                                <div className="flex justify-end gap-2">
+                                    <Button variant="default" type="button">
+                                        Duplicate
+                                    </Button>
+                                    
+                                    <Button variant="destructive" type="button">
+                                        Delete
+                                    </Button>
+                                </div>
+
+
+
+
+
 
                             </FieldGroup>
                         </FieldSet>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Field, FieldLabel } from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Delete, GripVertical } from 'lucide-react';
@@ -9,7 +9,7 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-interface QuestionMultipleChoiceProps {
+interface QuestionCheckboxProps {
     questionType: string;
 }
 
@@ -33,8 +33,7 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
             <div {...attributes} {...listeners} className="cursor-grab">
                 <GripVertical className="h-5 w-5 text-gray-500" />
             </div>
-            <RadioGroupItem className="cursor-pointer" value={option.value} id={option.id} />
-            {option.label}
+            <Checkbox className="cursor-pointer" value={option.value} id={option.id} />
             <Input type="text" placeholder={option.placeholder} value={option.text} onChange={(e) => updateOptionText(option.id, e.target.value)} className="ml-2" />
             <Delete className={`h-7 w-7 ${optionsLength <= minLimit ? 'opacity-50' : 'cursor-pointer hover:text-red-500'}`}
                 onClick={optionsLength > minLimit ? () => removeOption(option.id) : undefined} />
@@ -42,15 +41,15 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
     );
 }
 
-export default function QuestionMultipleChoice({ questionType }: QuestionMultipleChoiceProps) {
+export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps) {
 
     const [options, setOptions] = useState([
-        { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
-        { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
-        { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
+        { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option 1', text: '' },
+        { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option 2', text: '' },
+        { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option 3', text: '' },
     ]);
     const minLimit = 3;
-    const maxLimit = 5;
+    const maxLimit = 6;
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -71,7 +70,7 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
                 id: `option${index + 1}`,
                 value: `option${index + 1}`,
                 label: String.fromCharCode(65 + index),
-                placeholder: `Option ${String.fromCharCode(65 + index)}`,
+                placeholder: `Option ${index + 1}`,
             }));
             setOptions(updatedOptions);
         }
@@ -89,7 +88,7 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
             id: `option${nextIndex}`,
             value: `option${nextIndex}`,
             label: nextLabel,
-            placeholder: `Option ${nextLabel}`,
+            placeholder: `Option ${nextIndex}`,
             text: ''
         };
         if (options.length < maxLimit) {
@@ -113,33 +112,33 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
 
     return (
         <>
-            {questionType === "multiple-choice" && (
+            {questionType === "check-box" && (
                 <Field>
                     <FieldLabel>Options</FieldLabel>
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={options.map(o => o.id)} strategy={verticalListSortingStrategy}>
-                            <RadioGroup name="multiple-choice-options" className="flex flex-col gap-4">
-                                {options.map(option => (
-                                    <SortableOption
-                                        key={option.id}
-                                        option={option}
-                                        updateOptionText={updateOptionText}
-                                        removeOption={removeOption}
-                                        minLimit={minLimit}
-                                        optionsLength={options.length}
-                                    />
-                                ))}
-                                {options.length < maxLimit && (
+
+                            {options.map(option => (
+                                <SortableOption
+                                    key={option.id}
+                                    option={option}
+                                    updateOptionText={updateOptionText}
+                                    removeOption={removeOption}
+                                    minLimit={minLimit}
+                                    optionsLength={options.length}
+                                />
+                            ))}
+                            {options.length < maxLimit && (
                                 <div className='flex items-center gap-2 ml-7'>
-                                    <RadioGroupItem value="add-option" className="pointer-events-none cursor-default" />
+
                                     <Button variant="link" type="button"
                                         onClick={addOption}
                                         disabled={options.length >= maxLimit}>
                                         Add Option
                                     </Button>
                                 </div>
-                                )}
-                            </RadioGroup>
+                            )}
+
                         </SortableContext>
                     </DndContext>
                 </Field>
