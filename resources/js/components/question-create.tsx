@@ -4,7 +4,6 @@ import {
     FieldLabel,
     FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import {
     Select,
     SelectContent,
@@ -44,8 +43,6 @@ interface Question {
 }
 
 export default function QuestionCreate() {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
     const [questions, setQuestions] = useState<Question[]>([{
         id: 1,
         description: '',
@@ -77,9 +74,9 @@ export default function QuestionCreate() {
         const newQuestion: Question = {
             id: questions.length > 0 ? Math.max(...questions.map(q => q.id)) + 1 : 1,
             description: '',
-            type: 'multiple-choice',
+            type: questions[0]?.type || 'multiple-choice',
             question: '',
-            points: 1,
+            points: questions[0]?.points || 1,
             options: [
                 { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
                 { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
@@ -110,18 +107,6 @@ export default function QuestionCreate() {
                 <form>
                     <FieldGroup>
                         <FieldSet>
-                            <FieldGroup>
-                                {/* Title and Description */}
-                                <Field>
-                                    <FieldLabel>Title</FieldLabel>
-                                    <Input type="text" placeholder="Enter title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                                </Field>
-                                <Field>
-                                    <FieldLabel>Description</FieldLabel>
-                                    <Textarea placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                </Field>
-                            </FieldGroup>
-
                             {questions.map((q, index) => (
                                 <FieldGroup key={q.id} className="bg-amber-50 p-4 rounded-lg">
                                     
@@ -138,7 +123,7 @@ export default function QuestionCreate() {
                                             {/* Question Type */}
                                             <Field>
                                                 <FieldLabel>Type</FieldLabel>
-                                                <Select value={q.type} onValueChange={(value) => updateQuestion(q.id, 'type', value)}>
+                                                <Select value={q.type} onValueChange={(value) => setQuestions(questions.map(question => ({ ...question, type: value })))}>
                                                     <SelectTrigger id="question-type">
                                                         <SelectValue />
                                                     </SelectTrigger>
@@ -153,7 +138,7 @@ export default function QuestionCreate() {
                                             </Field>
 
                                             {/* Question Points */}
-                                            <QuestionPoints points={q.points} onPointsChange={(points) => updateQuestion(q.id, 'points', points)} />
+                                            <QuestionPoints points={q.points} onPointsChange={(points) => setQuestions(questions.map(question => ({ ...question, points })))} />
 
                                         </div>
                                     </div>

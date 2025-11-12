@@ -1,10 +1,14 @@
 import QuestionCreate from '@/components/question-create';
 import { Button } from '@/components/ui/button';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import AppLayout from '@/layouts/app-layout';
 import { questions_import, questions_index } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Import } from 'lucide-react';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,6 +18,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function CreateQuestion() {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [questionField , setQuestionField] = useState(1);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Create Question" />
@@ -27,7 +35,19 @@ export default function CreateQuestion() {
                         </Button>
                     </h3>
                 </div>
+                <FieldGroup>
+                    {/* Title and Description */}
+                    <Field>
+                        <FieldLabel>Title</FieldLabel>
+                        <Input type="text" placeholder="Enter title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    </Field>
+                    <Field>
+                        <FieldLabel>Description</FieldLabel>
+                        <Textarea placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    </Field>
+                </FieldGroup>
                 <QuestionCreate />
+                
             </div>
         </AppLayout>
     );

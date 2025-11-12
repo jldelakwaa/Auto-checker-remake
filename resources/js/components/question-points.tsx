@@ -7,6 +7,7 @@ interface QuestionPointsProps {
 }
 
 export default function QuestionPoints({ points, onPointsChange }: QuestionPointsProps) {
+    
     return (
         <Field>
             <FieldLabel>Points each</FieldLabel>
