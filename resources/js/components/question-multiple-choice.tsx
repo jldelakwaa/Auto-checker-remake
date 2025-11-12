@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Field, FieldLabel } from "@/components/ui/field"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import { Input } from "./ui/input";
@@ -9,12 +8,22 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+interface Option {
+    id: string;
+    value: string;
+    label: string;
+    placeholder: string;
+    text: string;
+}
+
 interface QuestionMultipleChoiceProps {
     questionType: string;
+    options: Option[];
+    onOptionsChange: (options: Option[]) => void;
 }
 
 interface SortableOptionProps {
-    option: { id: string; value: string; label: string; placeholder: string; text: string };
+    option: Option;
     updateOptionText: (id: string, text: string) => void;
     removeOption: (id: string) => void;
     minLimit: number;
@@ -42,13 +51,8 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
     );
 }
 
-export default function QuestionMultipleChoice({ questionType }: QuestionMultipleChoiceProps) {
+export default function QuestionMultipleChoice({ questionType, options, onOptionsChange }: QuestionMultipleChoiceProps) {
 
-    const [options, setOptions] = useState([
-        { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
-        { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
-        { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
-    ]);
     const minLimit = 3;
     const maxLimit = 5;
 
@@ -73,16 +77,17 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
                 label: String.fromCharCode(65 + index),
                 placeholder: `Option ${String.fromCharCode(65 + index)}`,
             }));
-            setOptions(updatedOptions);
+            onOptionsChange(updatedOptions);
         }
     };
 
     const updateOptionText = (id: string, text: string) => {
-        setOptions(options.map(option => option.id === id ? { ...option, text } : option));
+        const newOptions = options.map(option => option.id === id ? { ...option, text } : option);
+        onOptionsChange(newOptions);
     };
 
     const addOption = () => {
-        const lastLabel = options[options.length - 1].label;
+        const lastLabel = options.length > 0 ? options[options.length - 1].label : '@'; // '@' is before 'A'
         const nextLabel = String.fromCharCode(lastLabel.charCodeAt(0) + 1);
         const nextIndex = options.length + 1;
         const newOption = {
@@ -93,7 +98,7 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
             text: ''
         };
         if (options.length < maxLimit) {
-            setOptions([...options, newOption]);
+            onOptionsChange([...options, newOption]);
         }
     };
 
@@ -102,12 +107,12 @@ export default function QuestionMultipleChoice({ questionType }: QuestionMultipl
             const filteredOptions = options.filter(option => option.id !== id);
             const updatedOptions = filteredOptions.map((option, index) => ({
                 id: `option${index + 1}`,
-                value: option.value,
-                label: String.fromCharCode(65 + index), // 'A' is 65 in ASCII
+                value: `option${index + 1}`,
+                label: String.fromCharCode(65 + index),
                 placeholder: `Option ${String.fromCharCode(65 + index)}`,
                 text: option.text
             }));
-            setOptions(updatedOptions);
+            onOptionsChange(updatedOptions);
         }
     };
 

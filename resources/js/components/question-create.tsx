@@ -19,21 +19,91 @@ import QuestionEnumeration from "./question-enumeration"
 import QuestionMultipleChoice from "./question-multiple-choice"
 import QuestionCheckbox from "./question-checkbox"
 import { Button } from "./ui/button"
-import { Trash2, Copy  } from 'lucide-react';
+import { Trash2, Copy, Plus } from 'lucide-react';
+import QuestionPoints from "./question-points"
+
+interface Option {
+    id: string;
+    value: string;
+    label: string;
+    placeholder: string;
+    text: string;
+}
+
+interface Question {
+    id: number;
+    description: string;
+    type: string;
+    question: string;
+    points: number;
+    options: Option[];
+    enumerationAnswer: string;
+    trueFalseSelected: string;
+    checkboxSelected: string[];
+    isNew: boolean;
+}
 
 export default function QuestionCreate() {
-    const [questionNumber, setQuestionNumber] = useState(1);
-    const [defaultQuestionScore, setDefaultQuestionScore] = useState(1);
-    const [answerType, setAnswerType] = useState([]);
-    const [answers, setAnswers] = useState([]);
-    const [questionType, setQuestionType] = useState("multiple-choice");
-    const [options, setOptions] = useState<string[]>([]);
-    const [questionTypes, setQuestionTypes] = useState([
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [questions, setQuestions] = useState<Question[]>([{
+        id: 1,
+        description: '',
+        type: 'multiple-choice',
+        question: '',
+        points: 1,
+        options: [
+            { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
+            { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
+            { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
+        ],
+        enumerationAnswer: '',
+        trueFalseSelected: 'true',
+        checkboxSelected: [],
+        isNew: false,
+    }]);
+    const [questionTypes] = useState([
         { value: 'multiple-choice', label: 'Multiple Choice' },
         { value: 'check-box', label: 'Check Box' },
         { value: 'true-false', label: 'True or False' },
         { value: 'enumeration', label: 'Enumeration' },
     ]);
+
+    const updateQuestion = (id: number, field: keyof Question, value: unknown) => {
+        setQuestions(questions.map(q => q.id === id ? { ...q, [field]: value } : q));
+    };
+
+    const addQuestion = () => {
+        const newQuestion: Question = {
+            id: questions.length > 0 ? Math.max(...questions.map(q => q.id)) + 1 : 1,
+            description: '',
+            type: 'multiple-choice',
+            question: '',
+            points: 1,
+            options: [
+                { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
+                { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
+                { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
+            ],
+            enumerationAnswer: '',
+            trueFalseSelected: 'true',
+            checkboxSelected: [],
+            isNew: true,
+        };
+        setQuestions([...questions, newQuestion]);
+    };
+
+    const copyQuestion = (question: Question) => {
+        const newQuestion = { ...question, id: Date.now(), isNew: true };
+        setQuestions([...questions, newQuestion]);
+    };
+
+    const deleteQuestion = (id: number) => {
+        if (questions.length > 1) {
+            setQuestions(questions.filter(q => q.id !== id));
+        }
+    };
+
     return (
         <div>
             <div className="w-full p-4 rounded-lg shadow-lg">
@@ -41,68 +111,87 @@ export default function QuestionCreate() {
                     <FieldGroup>
                         <FieldSet>
                             <FieldGroup>
+                                {/* Title and Description */}
                                 <Field>
                                     <FieldLabel>Title</FieldLabel>
-                                    <Input type="text" placeholder="Enter title" />
+                                    <Input type="text" placeholder="Enter title" value={title} onChange={(e) => setTitle(e.target.value)} />
                                 </Field>
                                 <Field>
                                     <FieldLabel>Description</FieldLabel>
-                                    <Textarea placeholder="Enter description" />
+                                    <Textarea placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
                                 </Field>
                             </FieldGroup>
 
-                            {/* Question Section */}
-                            <FieldGroup className="bg-amber-50 p-4 rounded-lg">
-                                <div className="grid grid-cols-3 gap-4">
-                                    <Field className="col-span-2">
-                                        <FieldLabel>Question {questionNumber}</FieldLabel>
-                                        <Textarea placeholder="Enter question" />
+                            {questions.map((q, index) => (
+                                <FieldGroup key={q.id} className="bg-amber-50 p-4 rounded-lg">
+                                    
+                                    <div className={`grid grid-cols-3 gap-4 
+                                        ${q.isNew ? 'hidden' : ''}`} //hide if copy/add
+                                    >
+                                        {/* Question description */}
+                                        <Field className="col-span-2">
+                                            <FieldLabel>Question Description</FieldLabel>
+                                            <Textarea placeholder="Enter question description" value={q.description} onChange={(e) => updateQuestion(q.id, 'description', e.target.value)} />
+                                        </Field>
+
+                                        <div className="flex gap-4">
+                                            {/* Question Type */}
+                                            <Field>
+                                                <FieldLabel>Type</FieldLabel>
+                                                <Select value={q.type} onValueChange={(value) => updateQuestion(q.id, 'type', value)}>
+                                                    <SelectTrigger id="question-type">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {questionTypes.map((type) => (
+                                                            <SelectItem key={type.value} value={type.value}>
+                                                                {type.label}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </Field>
+
+                                            {/* Question Points */}
+                                            <QuestionPoints points={q.points} onPointsChange={(points) => updateQuestion(q.id, 'points', points)} />
+
+                                        </div>
+                                    </div>
+
+                                    {/* Question with index */}
+                                    <Field className={`col-span-2`}>
+                                        <FieldLabel>Question {index + 1}</FieldLabel>
+                                        <Textarea placeholder="Enter question" value={q.question} onChange={(e) => updateQuestion(q.id, 'question', e.target.value)} />
                                     </Field>
 
-                                    <div className="flex gap-4">
-                                        <Field>
-                                            <FieldLabel>Type</FieldLabel>
-                                            <Select value={questionType} onValueChange={setQuestionType}>
-                                                <SelectTrigger id="question-type">
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {questionTypes.map((type) => (
-                                                        <SelectItem key={type.value} value={type.value}>
-                                                            {type.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </Field>
+                                    {/* Show appropriate question type component */}
+                                    <QuestionEnumeration questionType={q.type} answer={q.enumerationAnswer} onAnswerChange={(answer) => updateQuestion(q.id, 'enumerationAnswer', answer)} />
+                                    <QuestionTrueFalse questionType={q.type} selected={q.trueFalseSelected} onSelectedChange={(selected) => updateQuestion(q.id, 'trueFalseSelected', selected)} />
+                                    <QuestionMultipleChoice questionType={q.type} options={q.options} onOptionsChange={(options) => updateQuestion(q.id, 'options', options)} />
+                                    <QuestionCheckbox questionType={q.type} options={q.options} selected={q.checkboxSelected} onSelectedChange={(selected) => updateQuestion(q.id, 'checkboxSelected', selected)} onOptionsChange={(options) => updateQuestion(q.id, 'options', options)} />
 
-                                        <Field>
-                                            <FieldLabel>Points</FieldLabel>
-                                            <Input type="number" placeholder="Enter points"
-                                                value={defaultQuestionScore}
-                                                onChange={(e) => setDefaultQuestionScore(Number(e.target.value))} />
-                                        </Field>
+                                    <div className="flex justify-end gap-2">
+                                        {/* Add Question */}
+                                        <Button variant="default" type="button" className="bg-green-500 hover:bg-transparent hover:text-green-500 hover:border-green-500 border cursor-pointer" onClick={addQuestion}>
+                                            <Plus className="h-4 w-4" />
+                                        </Button>
+
+                                        {/* Copy Question */}
+                                        <Button variant="default" type="button" className="bg-gray-500 hover:bg-transparent hover:text-gray-500 hover:border-gray-500 border cursor-pointer" onClick={() => copyQuestion(q)}>
+                                            <Copy className="h-4 w-4" />
+                                        </Button>
+
+                                        {/* Delete Question */}
+                                        {index === 1 && (
+                                            // prevent deleting last first question
+                                            <Button variant="destructive" type="button" className="hover:bg-transparent hover:text-red-500 hover:border-red-500 border cursor-pointer" onClick={() => deleteQuestion(q.id)}>
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )}
                                     </div>
-                                </div>
-
-                                {/* Answer Section */}
-                                <QuestionEnumeration questionType={questionType} />
-                                <QuestionTrueFalse questionType={questionType} />
-                                <QuestionMultipleChoice questionType={questionType} />
-                                <QuestionCheckbox questionType={questionType} />
-
-                                {/* other function */}
-                                <div className="flex justify-end gap-2">
-                                    <Button variant="default" type="button" className="hover:bg-transparent hover:text-black hover:border-black border cursor-pointer">
-                                        <Copy className="h-4 w-4" />
-                                    </Button>
-
-                                    <Button variant="destructive" type="button" className="hover:bg-transparent hover:text-red-500 hover:border-red-500 border cursor-pointer">
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </div>
-                            </FieldGroup>
-                            <Button variant="default" className="self-end" type="submit">
+                                </FieldGroup>
+                            ))}
+                            <Button variant="default" className="cursor-pointer self-end" type="submit">
                                 Submit
                             </Button>
                         </FieldSet>

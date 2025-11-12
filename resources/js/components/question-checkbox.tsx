@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "./ui/input";
@@ -9,19 +8,33 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+interface Option {
+    id: string;
+    value: string;
+    label: string;
+    placeholder: string;
+    text: string;
+}
+
 interface QuestionCheckboxProps {
     questionType: string;
+    options: Option[];
+    selected: string[];
+    onSelectedChange: (selected: string[]) => void;
+    onOptionsChange: (options: Option[]) => void;
 }
 
 interface SortableOptionProps {
-    option: { id: string; value: string; label: string; placeholder: string; text: string };
+    option: Option;
+    checked: boolean;
+    onCheckedChange: (checked: boolean) => void;
     updateOptionText: (id: string, text: string) => void;
     removeOption: (id: string) => void;
     minLimit: number;
     optionsLength: number;
 }
 
-function SortableOption({ option, updateOptionText, removeOption, minLimit, optionsLength }: SortableOptionProps) {
+function SortableOption({ option, checked, onCheckedChange, updateOptionText, removeOption, minLimit, optionsLength }: SortableOptionProps) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({ id: option.id });
 
     const style = {
@@ -33,8 +46,7 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
             <div {...attributes} {...listeners} className="cursor-grab">
                 <GripVertical className="h-5 w-5 text-gray-500" />
             </div>
-            <Checkbox className="cursor-pointer" value={option.value} id={option.id}/>
-            {/* {option.label} */}
+            <Checkbox className="cursor-pointer" checked={checked} onCheckedChange={onCheckedChange} id={option.id}/>
             <Input type="text" placeholder={option.placeholder} value={option.text} onChange={(e) => updateOptionText(option.id, e.target.value)} className="ml-2"/>
             <Delete className={`h-7 w-7 ${optionsLength <= minLimit ? 'opacity-50' : 'cursor-pointer hover:text-red-500'}`}
                 onClick={optionsLength > minLimit ? () => removeOption(option.id) : undefined} />
@@ -42,13 +54,8 @@ function SortableOption({ option, updateOptionText, removeOption, minLimit, opti
     );
 }
 
-export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps) {
+export default function QuestionCheckbox({ questionType, options, selected, onSelectedChange, onOptionsChange }: QuestionCheckboxProps) {
 
-    const [options, setOptions] = useState([
-        { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option 1', text: '' },
-        { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option 2', text: '' },
-        { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option 3', text: '' },
-    ]);
     const minLimit = 3;
     const maxLimit = 6;
 
@@ -73,16 +80,17 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
                 label: String.fromCharCode(65 + index),
                 placeholder: `Option ${index + 1}`,
             }));
-            setOptions(updatedOptions);
+            onOptionsChange(updatedOptions);
         }
     };
 
     const updateOptionText = (id: string, text: string) => {
-        setOptions(options.map(option => option.id === id ? { ...option, text } : option));
+        const newOptions = options.map(option => option.id === id ? { ...option, text } : option);
+        onOptionsChange(newOptions);
     };
 
     const addOption = () => {
-        const lastLabel = options[options.length - 1].label;
+        const lastLabel = options.length > 0 ? options[options.length - 1].label : '@';
         const nextLabel = String.fromCharCode(lastLabel.charCodeAt(0) + 1);
         const nextIndex = options.length + 1;
         const newOption = {
@@ -93,7 +101,7 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
             text: ''
         };
         if (options.length < maxLimit) {
-            setOptions([...options, newOption]);
+            onOptionsChange([...options, newOption]);
         }
     };
 
@@ -103,11 +111,11 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
             const updatedOptions = filteredOptions.map((option, index) => ({
                 id: `option${index + 1}`,
                 value: option.value,
-                label: String.fromCharCode(65 + index), // 'A' is 65 in ASCII
+                label: String.fromCharCode(65 + index),
                 placeholder: `Option ${String.fromCharCode(65 + index)}`,
                 text: option.text
             }));
-            setOptions(updatedOptions);
+            onOptionsChange(updatedOptions);
         }
     };
 
@@ -123,6 +131,14 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
                                 <SortableOption
                                     key={option.id}
                                     option={option}
+                                    checked={selected.includes(option.value)}
+                                    onCheckedChange={(checked) => {
+                                        if (checked) {
+                                            onSelectedChange([...selected, option.value]);
+                                        } else {
+                                            onSelectedChange(selected.filter(v => v !== option.value));
+                                        }
+                                    }}
                                     updateOptionText={updateOptionText}
                                     removeOption={removeOption}
                                     minLimit={minLimit}
@@ -131,7 +147,7 @@ export default function QuestionCheckbox({ questionType }: QuestionCheckboxProps
                             ))}
                             {options.length < maxLimit && (
                                 <div className='flex items-center gap-2 ml-7'>
-                                    <Checkbox value="add-option" className="pointer-events-none cursor-default " />
+                                    <Checkbox checked={false} className="pointer-events-none cursor-default " />
                                     <Button variant="link" type="button"
                                         className='cursor-pointer'
                                         onClick={addOption}
