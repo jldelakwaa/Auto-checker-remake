@@ -20,6 +20,15 @@ class QuestionController extends Controller
     }
 
     /**
+     * API index for questions.
+     */
+    public function apiIndex(Request $request)
+    {
+        $questions = Question::where('user_id', Auth::id())->get();
+        return response()->json($questions);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(): Response
@@ -66,6 +75,7 @@ class QuestionController extends Controller
             $answers[] = $this->formatAnswer($q);
         }
 
+        // Generate unique QID
         do {
             $qid = \Illuminate\Support\Str::random(16);
         } while (Question::where('qid', $qid)->exists());

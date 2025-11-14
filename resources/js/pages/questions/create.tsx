@@ -87,9 +87,11 @@ export default function CreateQuestion() {
                         </ul>
                     </div>
                     <QuestionCreate form={form} />
-                    <Button type="submit" disabled={form.processing}>
-                        Submit
-                    </Button>
+                    <div className="flex justify-end">
+                        <Button type="submit" disabled={form.processing} className="mt-4">
+                            Submit
+                        </Button>
+                    </div>
                 </form>
             </div>
         </AppLayout>

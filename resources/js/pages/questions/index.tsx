@@ -4,6 +4,7 @@ import { questions_index, questions_create, questions_import } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Import, SquarePlus  } from 'lucide-react';
+import QuestionTable from '@/components/QuestionTable/question-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,6 +29,15 @@ export default function Questions() {
                         <Import className="mr-2 h-4 w-4" /> Import Questions
                     </Link>
                 </Button>
+            </div>
+
+            {/* Filter */}
+            <div>
+
+            </div>
+            {/* Table */}
+            <div>
+                <QuestionTable />
             </div>
         </AppLayout>
     );
