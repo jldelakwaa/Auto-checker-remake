@@ -17,7 +17,7 @@ import QuestionTrueFalse from "./question-true-false"
 import QuestionEnumeration from "./question-enumeration"
 import QuestionMultipleChoice from "./question-multiple-choice"
 import QuestionCheckbox from "./question-checkbox"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { Trash2, Copy, Plus } from 'lucide-react';
 import QuestionPoints from "./question-points"
 
@@ -155,18 +155,18 @@ export default function QuestionCreate({ form }: QuestionCreateProps) {
 
                                     <div className="flex justify-end gap-2">
                                         {/* Add Question */}
-                                        <Button variant="default" type="button" className="bg-green-500 hover:bg-transparent hover:text-green-500 hover:border-green-500 border cursor-pointer" onClick={addQuestion}>
+                                        <Button variant="qadd" type="button" onClick={addQuestion}>
                                             <Plus className="h-4 w-4" />
                                         </Button>
 
                                         {/* Copy Question */}
-                                        <Button variant="default" type="button" className="bg-gray-500 hover:bg-transparent hover:text-gray-500 hover:border-gray-500 border cursor-pointer" onClick={() => copyQuestion(q)}>
+                                        <Button variant="qcopy" type="button" onClick={() => copyQuestion(q)}>
                                             <Copy className="h-4 w-4" />
                                         </Button>
 
                                         {/* Delete Question */}
                                         {index > 0 && (
-                                            <Button variant="destructive" type="button" className="hover:bg-transparent hover:text-red-500 hover:border-red-500 border cursor-pointer" onClick={() => deleteQuestion(q.id)}>
+                                            <Button variant="qdelete" type="button" onClick={() => deleteQuestion(q.id)}>
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
                                         )}

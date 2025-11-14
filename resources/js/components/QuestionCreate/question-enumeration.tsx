@@ -1,5 +1,5 @@
 import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 interface QuestionEnumerationProps {
     questionType: string;

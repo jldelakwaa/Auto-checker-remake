@@ -1,7 +1,7 @@
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Delete, GripVertical } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';

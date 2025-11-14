@@ -1,5 +1,5 @@
 import { Field, FieldLabel } from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 
 interface QuestionTrueFalseProps {
     questionType: string;

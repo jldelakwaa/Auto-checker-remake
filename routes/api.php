@@ -8,6 +8,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     Route::get('questions', [QuestionController::class, 'apiIndex']);
 });

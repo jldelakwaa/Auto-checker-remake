@@ -5,13 +5,22 @@ import { columns, Question } from "./columns"
 import { DataTable } from "./data-table"
 
 async function getData(): Promise<Question[]> {
+    type APIQuestion = {
+        id: number;
+        title: string;
+        qdescription: string;
+        type: string;
+    };
+
     try {
-        const response = await fetch('/api/questions');
+        const response = await fetch('/api/questions', {
+            credentials: 'include'
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch questions');
         }
-        const questions = await response.json();
-        return questions.map((q: any) => ({
+        const questions: APIQuestion[] = await response.json();
+        return questions.map((q) => ({
             id: q.id,
             title: q.title,
             description: q.qdescription,
@@ -31,7 +40,7 @@ export default function QuestionTable() {
     }, [])
 
     return (
-        <div className="container mx-auto py-10">
+        <div className="container mx-auto">
             <DataTable columns={columns} data={data} />
         </div>
     )

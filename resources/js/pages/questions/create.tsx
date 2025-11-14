@@ -1,4 +1,4 @@
-import QuestionCreate from '@/components/question-create';
+import QuestionCreate from '@/components/QuestionCreate/question-create';
 import { Button } from '@/components/ui/button';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import AppLayout from '@/layouts/app-layout';
@@ -51,7 +51,7 @@ export default function CreateQuestion() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex justify-end items-center">
                     <h3 className="text-md font-medium flex items-center gap-2">Already built questions?
-                        <Button variant="default" asChild>
+                        <Button variant="import" asChild>
                             <Link href={questions_import()}>
                                 <Import className="h-4 w-4" />Import
                             </Link>
@@ -88,7 +88,7 @@ export default function CreateQuestion() {
                     </div>
                     <QuestionCreate form={form} />
                     <div className="flex justify-end">
-                        <Button type="submit" disabled={form.processing} className="mt-4">
+                        <Button variant="submit" type="submit" disabled={form.processing} className="mt-4">
                             Submit
                         </Button>
                     </div>

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -18,7 +18,27 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link:
+          "text-primary underline-offset-4 hover:underline",
+        create:
+          "bg-green-500 text-white hover:bg-green-600",
+        import:
+          "bg-blue-500 text-white hover:bg-blue-600",
+        delete:
+          "bg-red-500 text-white hover:bg-red-600",
+        clear:
+          "bg-yellow-500 text-white hover:bg-yellow-600",
+        copy:
+          "bg-gray-500 text-white hover:bg-gray-600",
+        submit:
+          "bg-indigo-500 text-white hover:bg-indigo-600",
+        qadd:
+          "bg-green-500 hover:bg-transparent hover:text-green-500 hover:border-green-500 border",
+        qcopy:
+          "bg-gray-300 hover:bg-transparent hover:text-gray-500 hover:border-gray-500 border",
+        qdelete:
+          "hover:bg-transparent hover:text-red-500 hover:border-red-500 border",
+
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
