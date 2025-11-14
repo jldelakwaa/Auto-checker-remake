@@ -19,14 +19,31 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function CreateQuestion() {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [questionField , setQuestionField] = useState(1);
     const form = useForm({
         title: '',
         description: '',
-        questions: [], // Pass from QuestionCreate
+        questions: [{
+            id: 1,
+            description: '',
+            type: 'multiple-choice',
+            question: '',
+            points: 1,
+            options: [
+                { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
+                { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
+                { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
+            ],
+            enumerationAnswer: '',
+            trueFalseSelected: 'true',
+            checkboxSelected: [],
+            isNew: false,
+        }],
     });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        form.post('/questions'); // Adjust route as needed
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -41,26 +58,39 @@ export default function CreateQuestion() {
                         </Button>
                     </h3>
                 </div>
-                <FieldGroup>
-                    {/* Title and Description */}
-                    <Field>
-                        <FieldLabel>Title</FieldLabel>
-                        <Input type="text" placeholder="Enter title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                    </Field>
-                    <Field>
-                        <FieldLabel>Description</FieldLabel>
-                        <Textarea placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                    </Field>
-                </FieldGroup>
-                <div className='italic text-sm text-gray-500'>
-                    <p >Note: </p>
-                    <ul className='list-disc list-inside'>
-                        <li>Max of only 20 questions.</li>
-                        <li>You can only create one type of question.</li>
-                    </ul>
-                </div>
-                <QuestionCreate />
-                
+                <form onSubmit={handleSubmit}>
+                    <FieldGroup>
+                        <Field>
+                            <FieldLabel>Title</FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="Enter title"
+                                value={form.data.title}
+                                onChange={(e) => form.setData('title', e.target.value)}
+                            />
+                        </Field>
+                        <Field>
+                            <FieldLabel>Description</FieldLabel>
+                            <Textarea
+                                placeholder="Enter description"
+                                value={form.data.description}
+                                onChange={(e) => form.setData('description', e.target.value)}
+                            />
+                        </Field>
+                    </FieldGroup>
+                    <div className='italic text-sm text-gray-500'>
+                        <p >Note: </p>
+                        <ul className='list-disc list-inside'>
+                            <li>Max of only 20 questions.</li>
+                            <li>You can only create one type of question.</li>
+                            <li>Max of 10 points per question.</li>
+                        </ul>
+                    </div>
+                    <QuestionCreate form={form} />
+                    <Button type="submit" disabled={form.processing}>
+                        Submit
+                    </Button>
+                </form>
             </div>
         </AppLayout>
     );

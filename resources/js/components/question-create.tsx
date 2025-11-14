@@ -42,23 +42,18 @@ interface Question {
     isNew: boolean;
 }
 
-export default function QuestionCreate() {
-    const [questions, setQuestions] = useState<Question[]>([{
-        id: 1,
-        description: '',
-        type: 'multiple-choice',
-        question: '',
-        points: 1,
-        options: [
-            { id: 'option1', value: 'option1', label: 'A', placeholder: 'Option A', text: '' },
-            { id: 'option2', value: 'option2', label: 'B', placeholder: 'Option B', text: '' },
-            { id: 'option3', value: 'option3', label: 'C', placeholder: 'Option C', text: '' },
-        ],
-        enumerationAnswer: '',
-        trueFalseSelected: 'true',
-        checkboxSelected: [],
-        isNew: false,
-    }]);
+interface InertiaForm<T> {
+    data: T;
+    setData: <K extends keyof T>(key: K, value: T[K]) => void;
+}
+
+interface QuestionCreateProps {
+    form: InertiaForm<{ questions: Question[] }>;
+}
+
+export default function QuestionCreate({ form }: QuestionCreateProps) {
+    // Remove local questions state—use form.data.questions
+    const questions = form.data.questions;
     const [questionTypes] = useState([
         { value: 'multiple-choice', label: 'Multiple Choice' },
         { value: 'check-box', label: 'Check Box' },
@@ -67,7 +62,10 @@ export default function QuestionCreate() {
     ]);
 
     const updateQuestion = (id: number, field: keyof Question, value: unknown) => {
-        setQuestions(questions.map(q => q.id === id ? { ...q, [field]: value } : q));
+        const updatedQuestions = questions.map((q: Question) =>
+            q.id === id ? { ...q, [field]: value } : q
+        );
+        form.setData('questions', updatedQuestions);
     };
 
     const addQuestion = () => {
@@ -87,23 +85,18 @@ export default function QuestionCreate() {
             checkboxSelected: [],
             isNew: true,
         };
-        setQuestions([...questions, newQuestion]);
+        form.setData('questions', [...questions, newQuestion]);
     };
 
     const copyQuestion = (question: Question) => {
         const newQuestion = { ...question, id: Date.now(), isNew: true };
-        setQuestions([...questions, newQuestion]);
+        form.setData('questions', [...questions, newQuestion]);
     };
 
     const deleteQuestion = (id: number) => {
         if (questions.length > 1) {
-            setQuestions(questions.filter(q => q.id !== id));
+            form.setData('questions', questions.filter(q => q.id !== id));
         }
-    };
-
-    const SubmitForm = () => {
-        // Handle form submission logic here
-        console.log('Submitting questions:', questions);
     };
 
     return (
@@ -128,7 +121,7 @@ export default function QuestionCreate() {
                                             {/* Question Type */}
                                             <Field>
                                                 <FieldLabel>Type</FieldLabel>
-                                                <Select value={q.type} onValueChange={(value) => setQuestions(questions.map(question => ({ ...question, type: value })))}>
+                                                <Select value={q.type} onValueChange={(value) => form.setData('questions', questions.map(question => ({ ...question, type: value })))}>
                                                     <SelectTrigger id="question-type">
                                                         <SelectValue />
                                                     </SelectTrigger>
@@ -143,7 +136,7 @@ export default function QuestionCreate() {
                                             </Field>
 
                                             {/* Question Points */}
-                                            <QuestionPoints points={q.points} onPointsChange={(points) => setQuestions(questions.map(question => ({ ...question, points })))} />
+                                            <QuestionPoints points={q.points} onPointsChange={(points) => form.setData('questions', questions.map(question => ({ ...question, points })))} />
 
                                         </div>
                                     </div>
@@ -180,9 +173,7 @@ export default function QuestionCreate() {
                                     </div>
                                 </FieldGroup>
                             ))}
-                            <Button variant="default" className="cursor-pointer self-end" type="submit" onClick={SubmitForm}>
-                                Submit
-                            </Button>
+                            
                         </FieldSet>
                     </FieldGroup>
                 </form>
