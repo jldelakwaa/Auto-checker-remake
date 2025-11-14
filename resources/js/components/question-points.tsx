@@ -14,10 +14,10 @@ export default function QuestionPoints({ points, onPointsChange }: QuestionPoint
             <Input type="number" placeholder="Enter points"
                 value={points}
                 onChange={(e) => {
-                    const newPoints = Math.max(1, Number(e.target.value));
+                    const newPoints = Math.min(10, Math.max(1, Number(e.target.value)));
                     onPointsChange(newPoints);
                 }}
-                min={1} />
+                min={1} max={10} />
         </Field>
     );
 }
