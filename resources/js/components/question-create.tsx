@@ -101,6 +101,11 @@ export default function QuestionCreate() {
         }
     };
 
+    const SubmitForm = () => {
+        // Handle form submission logic here
+        console.log('Submitting questions:', questions);
+    };
+
     return (
         <div>
             <div className="w-full p-4 rounded-lg shadow-lg">
@@ -167,8 +172,7 @@ export default function QuestionCreate() {
                                         </Button>
 
                                         {/* Delete Question */}
-                                        {index === 1 && (
-                                            // prevent deleting last first question
+                                        {index > 0 && (
                                             <Button variant="destructive" type="button" className="hover:bg-transparent hover:text-red-500 hover:border-red-500 border cursor-pointer" onClick={() => deleteQuestion(q.id)}>
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
@@ -176,7 +180,7 @@ export default function QuestionCreate() {
                                     </div>
                                 </FieldGroup>
                             ))}
-                            <Button variant="default" className="cursor-pointer self-end" type="submit">
+                            <Button variant="default" className="cursor-pointer self-end" type="submit" onClick={SubmitForm}>
                                 Submit
                             </Button>
                         </FieldSet>

@@ -9,6 +9,7 @@ import { Import } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useForm } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,6 +22,11 @@ export default function CreateQuestion() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [questionField , setQuestionField] = useState(1);
+    const form = useForm({
+        title: '',
+        description: '',
+        questions: [], // Pass from QuestionCreate
+    });
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -46,6 +52,13 @@ export default function CreateQuestion() {
                         <Textarea placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
                     </Field>
                 </FieldGroup>
+                <div className='italic text-sm text-gray-500'>
+                    <p >Note: </p>
+                    <ul className='list-disc list-inside'>
+                        <li>Max of only 20 questions.</li>
+                        <li>You can only create one type of question.</li>
+                    </ul>
+                </div>
                 <QuestionCreate />
                 
             </div>
