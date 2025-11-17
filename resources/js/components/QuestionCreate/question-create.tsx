@@ -69,6 +69,10 @@ export default function QuestionCreate({ form }: QuestionCreateProps) {
     };
 
     const addQuestion = () => {
+        if (questions.length >= 20) {
+            alert('Maximum of 20 questions reached.');
+            return;
+        }
         const newQuestion: Question = {
             id: questions.length > 0 ? Math.max(...questions.map(q => q.id)) + 1 : 1,
             description: '',
@@ -89,6 +93,10 @@ export default function QuestionCreate({ form }: QuestionCreateProps) {
     };
 
     const copyQuestion = (question: Question) => {
+        if (questions.length >= 20) {
+            alert('Maximum of 20 questions reached.');
+            return;
+        }
         const newQuestion = { ...question, id: Date.now(), isNew: true };
         form.setData('questions', [...questions, newQuestion]);
     };
@@ -155,12 +163,12 @@ export default function QuestionCreate({ form }: QuestionCreateProps) {
 
                                     <div className="flex justify-end gap-2">
                                         {/* Add Question */}
-                                        <Button variant="qadd" type="button" onClick={addQuestion}>
+                                        <Button variant="qadd" type="button" onClick={addQuestion} disabled={questions.length >= 20}>
                                             <Plus className="h-4 w-4" />
                                         </Button>
 
                                         {/* Copy Question */}
-                                        <Button variant="qcopy" type="button" onClick={() => copyQuestion(q)}>
+                                        <Button variant="qcopy" type="button" onClick={() => copyQuestion(q)} disabled={questions.length >= 20}>
                                             <Copy className="h-4 w-4" />
                                         </Button>
 

@@ -33,11 +33,11 @@ const buttonVariants = cva(
         submit:
           "bg-indigo-500 text-white hover:bg-indigo-600",
         qadd:
-          "bg-green-500 hover:bg-transparent hover:text-green-500 hover:border-green-500 border",
+          "bg-green-300 hover:bg-transparent hover:text-green-500 hover:border-green-500 border",
         qcopy:
           "bg-gray-300 hover:bg-transparent hover:text-gray-500 hover:border-gray-500 border",
         qdelete:
-          "hover:bg-transparent hover:text-red-500 hover:border-red-500 border",
+          "bg-red-300 hover:bg-transparent hover:text-red-500 hover:border-red-500 border",
 
       },
       size: {

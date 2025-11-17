@@ -7,9 +7,9 @@ export default function QuestionFilter<TData>({ table }: { table: Table<TData> }
         <div className="flex items-center py-4">
             <Input
                 placeholder="Filter titles..."
-                value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                value={table.getState().globalFilter ?? ""}
                 onChange={(event) =>
-                    table.getColumn("title")?.setFilterValue(event.target.value)
+                    table.setGlobalFilter(event.target.value)
                 }
                 className="max-w-sm"
             />

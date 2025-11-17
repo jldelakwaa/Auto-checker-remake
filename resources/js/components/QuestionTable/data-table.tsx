@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-  ColumnFiltersState,
   getFilteredRowModel,
 } from "@tanstack/react-table"
 
@@ -29,16 +28,16 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])  
+  const [globalFilter, setGlobalFilter] = useState("")  
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      columnFilters,
+      globalFilter,
     },
   })
 
